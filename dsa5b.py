@@ -1,49 +1,51 @@
-#include <iostream>
-#include <climits>
-using namespace std;
+import sys
 
-#define V 5
+class Graph:
+    def _init_(self, vertices):
+        self.V = vertices
+        self.graph = [[0 for _ in range(vertices)] for _ in range(vertices)]
 
-int minKey(int key[], bool mstSet[]) {
-    int min = INT_MAX, min_index;
-    for (int v = 0; v < V; v++)
-        if (mstSet[v] == false && key[v] < min)
-            min = key[v], min_index = v;
-    return min_index;
-}
+    def print_mst(self, parent):
+        print("\nEdges in Minimum Spanning Tree:")
+        total = 0
+        for i in range(1, self.V):
+            print(f"Department {parent[i]} -- {i}  Distance = {self.graph[i][parent[i]]}")
+            total += self.graph[i][parent[i]]
+        print("Total Distance of MST:", total)
 
-void primMST(int graph[V][V]) {
-    int parent[V];
-    int key[V];
-    bool mstSet[V];
-    for (int i = 0; i < V; i++)
-        key[i] = INT_MAX, mstSet[i] = false;
-    key[0] = 0;
-    parent[0] = -1;
-    for (int count = 0; count < V - 1; count++) {
-        int u = minKey(key, mstSet);
-        mstSet[u] = true;
-        for (int v = 0; v < V; v++)
-            if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v])
-                parent[v] = u, key[v] = graph[u][v];
-    }
-    cout << "Edges in the Minimum Spanning Tree (Prim's Algorithm):\n";
-    int total = 0;
-    for (int i = 1; i < V; i++) {
-        cout << parent[i] << " -- " << i << " == " << graph[i][parent[i]] << endl;
-        total += graph[i][parent[i]];
-    }
-    cout << "Minimum Spanning Tree Cost: " << total << endl;
-}
+    def min_key(self, key, mstSet):
+        min_val = sys.maxsize
+        for v in range(self.V):
+            if key[v] < min_val and not mstSet[v]:
+                min_val = key[v]
+                min_index = v
+        return min_index
 
-int main() {
-    int graph[V][V] = {
-        {0, 2, 8, 0, 0},
-        {2, 0, 5, 3, 0},
-        {8, 5, 0, 0, 6},
-        {0, 3, 0, 0, 0},
-        {0, 0, 6, 0, 0}
-    };
-    primMST(graph);
-    return 0;
-}
+    def prim_mst(self):
+        key = [sys.maxsize] * self.V
+        parent = [None] * self.V
+        key[0] = 0
+        mstSet = [False] * self.V
+        parent[0] = -1
+
+        for _ in range(self.V):
+            u = self.min_key(key, mstSet)
+            mstSet[u] = True
+            for v in range(self.V):
+                if self.graph[u][v] and not mstSet[v] and self.graph[u][v] < key[v]:
+                    key[v] = self.graph[u][v]
+                    parent[v] = u
+
+        self.print_mst(parent)
+
+# Example: College departments as nodes (0–4)
+g = Graph(5)
+g.graph = [
+    [0, 10, 6, 5, 0],   # CS connections
+    [10, 0, 0, 15, 0],  # IT connections
+    [6, 0, 0, 4, 0],    # Mech connections
+    [5, 15, 4, 0, 8],   # Civil connections
+    [0, 0, 0, 8, 0]     # Electrical connections
+]
+
+g.prim_mst()
