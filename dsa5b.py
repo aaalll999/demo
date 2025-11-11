@@ -37,15 +37,14 @@ class Graph:
                     parent[v] = u
 
         self.print_mst(parent)
-
-# Example: College departments as nodes (0–4)
 g = Graph(5)
 g.graph = [
-    [0, 10, 6, 5, 0],   # CS connections
-    [10, 0, 0, 15, 0],  # IT connections
-    [6, 0, 0, 4, 0],    # Mech connections
-    [5, 15, 4, 0, 8],   # Civil connections
-    [0, 0, 0, 8, 0]     # Electrical connections
+    [0, 10, 6, 5, 0],   
+    [10, 0, 0, 15, 0], 
+    [6, 0, 0, 4, 0],    
+    [5, 15, 4, 0, 8],   
+    [0, 0, 0, 8, 0]     
 ]
 
 g.prim_mst()
+
