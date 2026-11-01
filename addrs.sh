@@ -52,22 +52,19 @@ fi
 ;;
 
 5)
-if [ -f address.txt ]
-then
 read -p "Enter name to modify: " name
-if grep -q "^$name " address.txt
+
+if grep -q "^$name " "$file"
 then
-read -p "Enter new name: " newname
-read -p "Enter new phone: " phone
-grep -v "^$name " address.txt > temp.txt
-echo "$newname $phone" >> temp.txt
-mv temp.txt address.txt
-echo "Record modified"
+    read -p "Enter new name: " newname
+    read -p "Enter new phone: " phone
+
+    sed -i "/^$name /d" "$file"
+    echo "$newname $phone" >> "$file"
+
+    echo "Record modified"
 else
-echo "Record not found"
-fi
-else
-echo "File not found"
+    echo "Record not found"
 fi
 ;;
 
